@@ -1,0 +1,6 @@
+# Dependências do projeto
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+requests
