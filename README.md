@@ -30,7 +30,7 @@ A aplicação foi desenhada seguindo o padrão de microsserviços conteinerizado
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/SEU_USUARIO/weather-challenge.git](https://github.com/SEU_USUARIO/weather-challenge.git)
+    git clone [https://github.com/VictorTavaresRafael/weather-challenge](https://github.com/VictorTavaresRafael/weather-challenge)
     cd weather-challenge
     ```
 
