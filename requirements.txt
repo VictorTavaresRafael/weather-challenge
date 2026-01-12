@@ -1,6 +1,9 @@
-# Dependências do projeto
 fastapi
 uvicorn
 sqlalchemy
 psycopg2-binary
 requests
+pydantic
+pytest           
+requests-mock    
+httpx            

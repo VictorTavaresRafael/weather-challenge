@@ -2,12 +2,13 @@
 
 ![Python](https://img.shields.io/badge/Python-3.9-blue?style=for-the-badge&logo=python)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.68-009688?style=for-the-badge&logo=fastapi)
+![Pytest](https://img.shields.io/badge/Tests-Pytest-green?style=for-the-badge&logo=pytest)
 ![Docker](https://img.shields.io/badge/Docker-20.10-2496ED?style=for-the-badge&logo=docker)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-316192?style=for-the-badge&logo=postgresql)
 
 Este projeto é uma solução completa de **Engenharia de Dados, Backend e Cloud-Native Applications**, desenvolvida como parte de um desafio técnico.
 
-O objetivo é demonstrar competências em **extração de dados (ETL)**, **armazenamento relacional**, **desenvolvimento de APIs RESTful** e **orquestração de infraestrutura com Docker**.
+O objetivo é demonstrar competências em **extração de dados (ETL)**, **armazenamento relacional**, **desenvolvimento de APIs RESTful**, **testes automatizados** e **orquestração de infraestrutura com Docker**.
 
 ---
 
@@ -17,20 +18,17 @@ A aplicação foi desenhada seguindo o padrão de **serviços conteinerizados**,
 
 O fluxo de dados funciona da seguinte maneira:
 
-1.  **Extração (ETL):**
-    Ao iniciar a aplicação, um processo independente executa a extração de dados climáticos consumindo a API da OpenWeatherMap.
+1. **Extração (ETL):**
+   Ao iniciar a aplicação, um processo independente executa a extração de dados climáticos consumindo a API da OpenWeatherMap. Implementa lógica de **Retry** e **Logging estruturado** para resiliência.
 
-2.  **Transformação e Armazenamento:**
-    Os dados são tratados, normalizados e persistidos em um banco de dados **PostgreSQL**, garantindo integridade e consistência.
+2. **Transformação e Armazenamento:**
+   Os dados são tratados, normalizados e persistidos em um banco de dados **PostgreSQL**, garantindo integridade e consistência transacional.
 
-3.  **Exposição via API:**
-    Uma API desenvolvida em **FastAPI** disponibiliza os dados armazenados por meio de endpoints HTTP documentados.
+3. **Exposição via API:**
+   Uma API desenvolvida em **FastAPI** disponibiliza os dados armazenados por meio de endpoints HTTP documentados, utilizando **Schemas (Pydantic)** para validação de contratos.
 
-4.  **Infraestrutura:**
-    Toda a solução é orquestrada via **Docker Compose**, garantindo que a aplicação e o banco de dados subam na mesma rede, na ordem correta e de forma totalmente reproduzível.
-
-> 🔎 **Observação:**
-> Embora o ETL e a API estejam no mesmo container por simplicidade de entrega, o ETL é executado como um **processo independente**, respeitando o princípio de **separação de responsabilidades**.
+4. **Infraestrutura:**
+   Toda a solução é orquestrada via **Docker Compose**, garantindo que a aplicação e o banco de dados subam na mesma rede, na ordem correta e de forma totalmente reproduzível.
 
 ---
 
@@ -39,7 +37,7 @@ O fluxo de dados funciona da seguinte maneira:
 A tabela principal (`weather_logs`) armazena as informações climáticas normalizadas:
 
 | Coluna | Tipo | Descrição |
-| :--- | :--- | :--- |
+|------|------|-----------|
 | `id` | Integer | Chave primária |
 | `city` | String | Nome da cidade consultada |
 | `temperature` | Float | Temperatura em graus Celsius |
@@ -52,74 +50,67 @@ A tabela principal (`weather_logs`) armazena as informações climáticas normal
 ## 🚀 Como Executar o Projeto
 
 ### Pré-requisitos
-* Docker e Docker Compose instalados.
-* Uma chave de API gratuita da [OpenWeatherMap](https://openweathermap.org/).
+- Docker e Docker Compose instalados.
+- Uma chave de API gratuita da OpenWeatherMap.
 
 ### Passo a Passo
 
-1.  **Clone o repositório:**
-    ```bash
-    git clone [https://github.com/VictorTavaresRafael/weather-challenge.git](https://github.com/VictorTavaresRafael/weather-challenge.git)
-    cd weather-challenge
-    ```
+```bash
+git clone https://github.com/VictorTavaresRafael/weather-challenge.git
+cd weather-challenge
+```
 
-2.  **Configure as Variáveis de Ambiente:**
-    Crie um arquivo chamado `.env` na raiz do projeto e preencha com suas credenciais seguindo o modelo abaixo:
+Crie um arquivo `.env` na raiz do projeto:
 
-    ```env
-    OPENWEATHER_API_KEY=sua_chave_aqui
-    DATABASE_URL=postgresql://user:password@db:5432/weatherdb
-    POSTGRES_USER=user
-    POSTGRES_PASSWORD=password
-    POSTGRES_DB=weatherdb
-    ```
+```env
+OPENWEATHER_API_KEY=sua_chave_aqui
+DATABASE_URL=postgresql://user:password@db:5432/weatherdb
+POSTGRES_USER=user
+POSTGRES_PASSWORD=password
+POSTGRES_DB=weatherdb
+```
 
-3.  **Suba a aplicação:**
-    ```bash
-    docker-compose up --build
-    ```
+Suba a aplicação:
+
+```bash
+docker-compose up --build
+```
+
+---
+
+## 🧪 Qualidade de Código e Testes
+
+Execute os testes com:
+
+```bash
+docker-compose exec web pytest -v
+```
 
 ---
 
 ## 📚 Documentação da API
 
-A documentação interativa é gerada automaticamente pelo Swagger UI. Após subir os containers, acesse:
-
-* **Swagger UI:** [http://localhost:8000/docs](http://localhost:8000/docs)
-* **Redoc:** [http://localhost:8000/redoc](http://localhost:8000/redoc)
-
-### Demonstração de Uso
-
-**1. Verificação de Status (Health Check):**
-Confirmação de que a API está online e funcional.
-![Status da API](assets/swagger-root.png)
-
-**2. Consulta de Dados Climáticos (GET /weather):**
-Retorno dos dados processados pelo ETL e persistidos no banco de dados.
-![Resposta JSON](assets/swagger-weather.png)
+- Swagger UI: http://localhost:8000/docs
+- Redoc: http://localhost:8000/redoc
 
 ---
 
 ## 🛠️ Decisões Técnicas
 
-As escolhas tecnológicas foram baseadas em performance, robustez e facilidade de manutenção:
-
-* **FastAPI:** Escolhido pela alta performance (assíncrono), validação de dados nativa (Pydantic) e geração automática de documentação.
-* **SQLAlchemy:** Utilizado como ORM para abstração do banco de dados, facilitando migrações e prevenindo SQL Injection.
-* **Docker Compose:** Garante que o ambiente de execução seja idêntico em qualquer máquina (dev/prod), eliminando o problema de "funciona na minha máquina".
-* **Variáveis de Ambiente (.env):** Implementadas para garantir a segurança de credenciais sensíveis (12-Factor App methodology).
+- **FastAPI**: Performance e documentação automática  
+- **SQLAlchemy**: ORM seguro e flexível  
+- **Docker Compose**: Ambiente reproduzível  
+- **Logging estruturado**  
+- **Variáveis de ambiente (.env)**
 
 ---
 
 ## 🔮 Melhorias Futuras
 
-Pontos de evolução identificados para as próximas iterações:
-
-* [ ] Implementação de Testes Unitários (Pytest).
-* [ ] Agendador de tarefas (Cron/Celery) para execução periódica do ETL.
-* [ ] Implementação de Cache (Redis) para reduzir carga no banco em leituras frequentes.
-* [ ] Separação do ETL em um microserviço dedicado.
+- [ ] Agendador de tarefas (Cron/Celery)
+- [ ] Cache com Redis
+- [ ] ETL como microserviço
 
 ---
 
-**Desenvolvido por Víctor Matheus Tavares Rafael**
+Desenvolvido por **Víctor Matheus Tavares Rafael**
