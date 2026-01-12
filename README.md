@@ -88,6 +88,16 @@ A documentação interativa é gerada automaticamente pelo Swagger UI. Após sub
 * **Swagger UI:** [http://localhost:8000/docs](http://localhost:8000/docs)
 * **Redoc:** [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
+### Demonstração de Uso
+
+**1. Verificação de Status (Health Check):**
+Confirmação de que a API está online e funcional.
+![Status da API](assets/swagger-root.png)
+
+**2. Consulta de Dados Climáticos (GET /weather):**
+Retorno dos dados processados pelo ETL e persistidos no banco de dados.
+![Resposta JSON](assets/swagger-weather.png)
+
 ---
 
 ## 🛠️ Decisões Técnicas
