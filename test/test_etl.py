@@ -23,13 +23,13 @@ def test_fetch_weather_data_success():
 def test_fetch_weather_data_retry_logic():
     """Testa se o sistema tenta 3 vezes antes de falhar (Retry Logic)."""
     with patch("app.etl.requests.get") as mock_get:
-        # CORREÇÃO AQUI: Simulamos um erro de REDE específico, não um erro genérico
+        # Simulamos um erro de REDE específico, não um erro genérico
         mock_get.side_effect = requests.exceptions.RequestException("Connection Error")
         
         with pytest.raises(Exception) as excinfo:
             fetch_weather_data(retries=3, delay=0)
         
-        # Agora o código vai capturar o erro, tentar 3x e lançar a exceção final
+        # O código vai capturar o erro, tentar 3x e lançar a exceção final
         assert "Max retries exceeded" in str(excinfo.value)
         assert mock_get.call_count == 3
 
