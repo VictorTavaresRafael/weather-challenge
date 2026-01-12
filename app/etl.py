@@ -1,7 +1,6 @@
 # Script de Extração (OpenWeather)
 import requests
 import os
-import sys
 from .database import SessionLocal
 from .models import WeatherData
 
